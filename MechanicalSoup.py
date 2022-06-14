@@ -24,3 +24,46 @@ response = browser.submit_selected()
 
 print('new url:', browser.get_url())
 print('my response:\n', response.text[:500])
+
+
+
+#open new URL
+new_url = browser.get_url()
+browser.open(new_url)
+
+#get HTML
+page = browser.get_current_page()
+all_images = page.find_all('img')
+
+#target the source attribute
+image_source = []
+for image in all_images:
+    image = image.get('src')
+    image_source.append(image)
+
+
+
+image_source = [image for image in image_source if image.startswith('https')]
+
+
+
+import os 
+import wget
+
+path = os.getcwd()
+
+print(path)
+path = os.path.join(path,search_term + "s")
+
+
+#create the directory
+os.mkdir(path)
+
+
+#download img
+
+counter=0
+for image in image_source:
+    save_as = os.path.join(path, search_term + str(counter) + '.jpg')
+    wget.download(image , save_as)
+    counter+=1
