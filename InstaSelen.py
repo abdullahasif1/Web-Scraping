@@ -37,4 +37,32 @@ button = WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.CSS_SELEC
 alert = WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))).click()
 
 
+#target the search input field
+searchbox = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Search']")))
+searchbox.clear()
 
+#search for the hashtag cat
+keyword = "#northernlights"
+searchbox.send_keys(keyword)
+
+
+#how many img to be selected
+driver.execute_script("window.scrollTo(0,4000):")
+
+images= driver.find_element_by_tag_name('img')
+images= [image.get_attribute('src') for image in images]
+
+
+
+path = os.getcwd()
+path = os.path.join(path, keyword[1:] + "s")
+
+#create the directory
+os.mkdir(path)
+
+#download images
+counter = 0
+for image in images:
+    save_as = os.path.join(path, keyword[1:] + str(counter) + '.jpg')
+    wget.download(image, save_as)
+    counter += 1
