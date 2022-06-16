@@ -5,16 +5,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 import time
-
-
-#other imports
 import os
 import wget
 
-driver = webdriver.Chrome('Computer/Home/Downloads/chromedriver_linux64/chromedriver.exe')
 
-#open the webpage
-driver.get("http://www.instagram.com")
+driver = webdriver.Chrome('/home/abdullah/Downloads/chromedriver_linux64/chromedriver')
+
+driver.get("https://www.instagram.com/")
+
 
 
 #target username
@@ -23,41 +21,48 @@ password = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SE
 
 #enter username and password(first clear then enter
 username.clear()
-username.send_keys("my_username")
+username.send_keys("abdullaahasif")
 password.clear()
-password.send_keys("my_password")
+password.send_keys("806arminn")
+
 
 #target the login button and click it
 button = WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']"))).click()
 
-#Logged in
+not_now = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))).click()
+not_now2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))).click()
 
-
-#if alert occurs
-alert = WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))).click()
-
+import time
 
 #target the search input field
 searchbox = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Search']")))
 searchbox.clear()
 
 #search for the hashtag cat
-keyword = "#northernlights"
+keyword = "#cats"
 searchbox.send_keys(keyword)
+ 
+# Wait for 5 seconds
+#time.sleep(5)
+searchbox.send_keys(Keys.ENTER)
+time.sleep(5)
+#searchbox.send_keys(Keys.ENTER)
+time.sleep(5)
 
+#scroll down to scrape more images
+driver.execute_script("window.scrollTo(0, 4000);")
 
-#how many img to be selected
-driver.execute_script("window.scrollTo(0,4000):")
+#target all images on the page
+images = driver.find_elements_by_tag_name('img')
+images = [image.get_attribute('src') for image in images]
+images = images[:-2]
 
-images= driver.find_element_by_tag_name('img')
-images= [image.get_attribute('src') for image in images]
-
+print('Number of scraped images: ', len(images))
 
 
 path = os.getcwd()
 path = os.path.join(path, keyword[1:] + "s")
 
-#create the directory
 os.mkdir(path)
 
 #download images
@@ -66,3 +71,7 @@ for image in images:
     save_as = os.path.join(path, keyword[1:] + str(counter) + '.jpg')
     wget.download(image, save_as)
     counter += 1
+
+
+while 1:
+    pass
