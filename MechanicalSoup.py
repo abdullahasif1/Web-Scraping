@@ -1,4 +1,6 @@
 import mechanicalsoup
+import os 
+import wget
 
 browser = mechanicalsoup.StatefulBrowser()
 url = "https://www.google.com/imghp?hl=en"
@@ -26,7 +28,6 @@ print('new url:', browser.get_url())
 print('my response:\n', response.text[:500])
 
 
-
 #open new URL
 new_url = browser.get_url()
 browser.open(new_url)
@@ -41,14 +42,8 @@ for image in all_images:
     image = image.get('src')
     image_source.append(image)
 
-
-
+#shortlisting imgaes in image sources by https tag
 image_source = [image for image in image_source if image.startswith('https')]
-
-
-
-import os 
-import wget
 
 path = os.getcwd()
 

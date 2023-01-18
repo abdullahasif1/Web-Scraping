@@ -9,6 +9,7 @@ import os
 import wget
 
 
+#download chrome web driver and state the path to it
 driver = webdriver.Chrome('/home/abdullah/Downloads/chromedriver_linux64/chromedriver')
 
 driver.get("https://www.instagram.com/")
@@ -19,11 +20,11 @@ driver.get("https://www.instagram.com/")
 username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='username']")))
 password = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
 
-#enter username and password(first clear then enter
+#enter username and password(first clear then enter)
 username.clear()
-username.send_keys("abdullaahasif")
+username.send_keys("enter username")  
 password.clear()
-password.send_keys("806arminn")
+password.send_keys("enter password") 
 
 
 #target the login button and click it
@@ -32,22 +33,24 @@ button = WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.CSS_SELEC
 not_now = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))).click()
 not_now2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//button[contains(text(), "Not Now")]'))).click()
 
-import time
+
 
 #target the search input field
 searchbox = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Search']")))
 searchbox.clear()
 
 #search for the hashtag cat
-keyword = "#cats"
-searchbox.send_keys(keyword)
+keyword = "cats"
+driver.get("https://www.instagram.com/explore/tags/"+ keyword +"/")
+
+#searchbox.send_keys(keyword)
  
 # Wait for 5 seconds
-#time.sleep(5)
-searchbox.send_keys(Keys.ENTER)
-time.sleep(5)
+#time.sleep(2)
 #searchbox.send_keys(Keys.ENTER)
 time.sleep(5)
+#searchbox.send_keys(Keys.ENTER)
+#time.sleep(10)
 
 #scroll down to scrape more images
 driver.execute_script("window.scrollTo(0, 4000);")
@@ -61,14 +64,15 @@ print('Number of scraped images: ', len(images))
 
 
 path = os.getcwd()
-path = os.path.join(path, keyword[1:] + "s")
+path = os.path.join(path, keyword + "s")
 
 os.mkdir(path)
 
 #download images
 counter = 0
 for image in images:
-    save_as = os.path.join(path, keyword[1:] + str(counter) + '.jpg')
+    save_as = os.path.join(path, keyword + str(counter) + '.jpg')
+    print(image)
     wget.download(image, save_as)
     counter += 1
 

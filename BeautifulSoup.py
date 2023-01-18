@@ -18,6 +18,9 @@ function_names = re.findall('id="random.\w+', str(names))
 #sliceing the first 4 alphabets 
 function_names = [item[4:] for item in function_names]
 
+
+
+
 #defind all function description
 description = soup.body.findAll('dd') 
 
@@ -42,3 +45,5 @@ data = pd.DataFrame({'function name': function_names, 'Function Usage': function
 data
 
 print(data)
+
+
